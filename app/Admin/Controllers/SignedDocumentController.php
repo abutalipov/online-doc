@@ -37,10 +37,10 @@ class SignedDocumentController extends AdminController
     $grid = new Grid(new SignedDocument());
 
     $grid->column('id', __('ID'))->sortable();
-    $grid->column('user_id','Владелец');
-    $grid->column('signature_key_id','Подпись (наверное в фоне генерировать)');
-    $grid->column('document_template_id','Шаблон');
-    $grid->column('path', 'Системный путь');
+    $grid->column('user.name','Владелец');
+    $grid->column('document_template.name','Шаблон');
+   // $grid->column('path', 'Документ');
+    $grid->column('path', 'Документ')->downloadable('/storage');
 
     return $grid;
 }
@@ -106,7 +106,7 @@ class SignedDocumentController extends AdminController
             }
 
             $templateProcessor->setImageValue('eds_qr', array("path" => $qrPath, "width" => 150, "height" => 150));
-            $signDocsPath = Storage::disk('local')->path('signDocs/'.$uuid.'.docx');
+            $signDocsPath = Storage::disk('public')->path('signDocs/'.$uuid.'.docx');
             $templateProcessor->saveAs($signDocsPath);
 
 
@@ -118,7 +118,7 @@ class SignedDocumentController extends AdminController
             $signature->sign_at=Carbon::now();
             $signature->uuid=$uuid;
             $signature->save();
-            $e->path = $signDocsPath;
+            $e->path = 'signDocs/'.$uuid.'.docx';
             $e->user_id = $user->id;
             $e->signature_key_id = $signature->id;
             return $e;

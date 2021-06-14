@@ -23,4 +23,13 @@ class SignedDocument extends Model
     {
         $this->attributes['fields'] = json_encode(array_values($value));
     }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+    public function signature(){
+        return $this->belongsTo(Signature::class);
+    }
+    public function document_template(){
+        return $this->belongsTo(DocumentTemplate::class);
+    }
 }
