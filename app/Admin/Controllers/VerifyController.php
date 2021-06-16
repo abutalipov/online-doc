@@ -52,26 +52,32 @@ class VerifyController extends AdminController
     public function store()
     {
         $request = \request();
-        dd($request);
-        $qrcode = new QrReader($request->file('qr_file')->path());
-        $text = $qrcode->text(); //return decoded text from QR Code
-        if ($text) {
-            $signatures = Signature::where('uuid', $text)->first();
-            if ($signatures) {
-                $data = json_decode($signatures->data);
-                $grid = new Table();
-                $grid->setHeaders(['Ключ', 'Значение']);
-                $rows = [];
-                foreach ($data as $key => $data_item) {
-                    $rows[] = [$key, $data_item];
+        if ($request->file('qr_file')->path()) {
+            $qrcode = new QrReader($request->file('qr_file')->path());
+            $text = $qrcode->text(); //return decoded text from QR Code
+
+
+            if ($text) {
+                $signatures = Signature::where('uuid', $text)->first();
+                if ($signatures) {
+                    $data = json_decode($signatures->data);
+                    $grid = new Table();
+                    $grid->setHeaders(['Ключ', 'Значение']);
+                    $rows = [];
+                    foreach ($data as $key => $data_item) {
+                        $rows[] = [$key, $data_item];
+                    }
+                    $grid->setRows($rows);
+                    $render = $grid->render();
+                } else {
+                    $render = "В базе не данных по данному идентификатору";
                 }
-                $grid->setRows($rows);
-                $render = $grid->render();
             } else {
-                $render = "В базе не данных по данному идентификатору";
+                $render = "Не удалось считать QR";
             }
-        }else{
-            $render = "Не удалось считать QR";
+        } else {
+
+            $render = "Ошибка чтения файла";
         }
         $row = new Content;
         $row->description('Результат проверки');
