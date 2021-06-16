@@ -28,7 +28,7 @@ class SecretKeyController extends AdminController
         $grid = new Grid(new SecretKey());
 
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('user_id','Владелец');
+        $grid->column('user.name','Владелец');
         $grid->column('title', 'Заголовок');
         $grid->column('valid_from', 'Действителен с');
         $grid->column('valid_until', 'Действителен до');

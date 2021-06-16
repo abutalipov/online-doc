@@ -34,8 +34,8 @@ class DocumentTemplateController extends AdminController
         $grid = new Grid(new DocumentTemplate());
 
         $grid->column('id', __('ID'))->sortable();
-        $grid->column('user_id','Владелец');
-        $grid->column('path', 'Системный путь');
+        $grid->column('user.name','Владелец');
+       // $grid->column('path', 'Системный путь')->downloadable('');
         $grid->column('name', 'Название');
 
         return $grid;
