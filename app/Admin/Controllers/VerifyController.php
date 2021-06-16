@@ -53,8 +53,13 @@ class VerifyController extends AdminController
     {
         $request = \request();
         if ($request->file('qr_file')->path()) {
-            $qrcode = new QrReader($request->file('qr_file')->path());
-            $text = $qrcode->text(); //return decoded text from QR Code
+            try {
+                $qrcode = new QrReader($request->file('qr_file')->path());
+                $text = $qrcode->text(); //return decoded text from QR Code
+
+            }catch (\Exception $e){
+                $text = false;
+            }
 
 
             if ($text) {
