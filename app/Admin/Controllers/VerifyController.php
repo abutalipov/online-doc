@@ -52,7 +52,7 @@ class VerifyController extends AdminController
     public function store()
     {
         $request = \request();
-        dd($request->file('qr_file')->path());
+        dd($request->file('qr_file'));
         $qrcode = new QrReader($request->file('qr_file')->path());
         $text = $qrcode->text(); //return decoded text from QR Code
         if ($text) {
