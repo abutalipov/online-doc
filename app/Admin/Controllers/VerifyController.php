@@ -33,7 +33,7 @@ class VerifyController extends AdminController
                 });
                 $row->column(6, function (Column $column) {
                     $form = new Form();
-
+                    $form->action('verify');
                     $form->image('qr_file', "QR файл")->help('Выберите изображение')->required();
                     $column->append($form->render());
                 });
